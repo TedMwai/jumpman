@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cart {
+  cart_id    Int      @id @default(autoincrement())
+  user_id    Int
+  product_id Int
+  size       Int
+  quantity   Int
+  created_at DateTime @db.DateTime(0)
+  products   products @relation(fields: [product_id], references: [products_id], onDelete: Cascade, map: "product_id")
+  user       user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, map: "user_id_cart")
+
+  @@index([product_id], map: "product_id_idx")
+  @@index([user_id], map: "user_id_idx")
+  @@index([user_id], map: "user_id_idx_cart")
+}
+
+model category {
+  category_id   Int        @id @default(autoincrement())
+  name          String     @db.VarChar(45)
+  description   String     @db.VarChar(100)
+  category_slug String     @map("category-slug") @db.VarChar(45)
+  created_at    DateTime?  @db.DateTime(0)
+  products      products[]
+}
+
+model order_details {
+  id         Int      @id @default(autoincrement())
+  payment_id Int
+  product_id Int
+  quantity   Int
+  size       Int
+  payment    payment  @relation(fields: [payment_id], references: [id], onDelete: Cascade, map: "pay_id")
+  products   products @relation(fields: [product_id], references: [products_id], onDelete: Cascade, map: "prod_id")
+
+  @@index([payment_id], map: "pay_id_idx")
+  @@index([product_id], map: "prod_id_idx")
+}
+
+model payment {
+  id            Int             @id @default(autoincrement())
+  user_id       Int
+  payment_id    String          @db.VarChar(200)
+  date          DateTime        @db.Date
+  order_details order_details[]
+}
+
+model product_image {
+  product_image_id Int      @id @default(autoincrement())
+  product_id       Int
+  product_slug     String   @db.VarChar(60)
+  image            String   @db.VarChar(45)
+  products         products @relation(fields: [product_id], references: [products_id], onDelete: Cascade, map: "product-id")
+
+  @@index([product_id], map: "product-id_idx")
+}
+
+model products {
+  products_id   Int             @id @default(autoincrement())
+  category_id   Int
+  name          String          @db.VarChar(100)
+  description   String          @db.VarChar(1000)
+  product_slug  String          @db.VarChar(100)
+  price         Int
+  photo         String          @db.VarChar(100)
+  created_at    DateTime?       @db.Date
+  category      category        @relation(fields: [category_id], references: [category_id], onDelete: Cascade, map: "category-id")
+  cart          cart[]
+  order_details order_details[]
+  product_image product_image[]
+  wishlist      wishlist[]
+
+  @@index([category_id], map: "category-id_idx")
+}
+
+model user {
+  user_id      Int            @id @default(autoincrement())
+  email        String         @db.VarChar(45)
+  password     String         @db.VarChar(200)
+  first_name   String         @db.VarChar(45)
+  last_name    String         @db.VarChar(45)
+  telephone    String         @db.VarChar(45)
+  created_at   DateTime       @db.DateTime(0)
+  cart         cart[]
+  user_address user_address[]
+  wishlist     wishlist[]
+}
+
+model user_address {
+  user_address_id Int     @id @default(autoincrement())
+  user_id         Int
+  city            String  @db.VarChar(45)
+  postal_code     String? @db.VarChar(45)
+  mobile          Int
+  user            user    @relation(fields: [user_id], references: [user_id], onDelete: Cascade, map: "user_id")
+
+  @@index([user_id], map: "user_id_idx")
+}
+
+model wishlist {
+  wishlist_id Int       @id @default(autoincrement())
+  product_id  Int
+  user_id     Int
+  size        Int
+  quantity    Int
+  created_at  DateTime? @db.DateTime(0)
+  products    products  @relation(fields: [product_id], references: [products_id], onDelete: Cascade, map: "product-id-wishlist")
+  user        user      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, map: "user-id-wishlist")
+
+  @@index([product_id], map: "product_id_idx")
+  @@index([user_id], map: "user_id_idx")
+}
