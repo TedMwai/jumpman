@@ -67,6 +67,11 @@ export const Icons = styled.div`
   div {
     display: flex;
     align-items: center;
+    div {
+      img {
+        cursor: pointer;
+      }
+    }
   }
 `;
 export const Count = styled.span`
