@@ -1,8 +1,12 @@
 import Head from "next/head";
 import Image from "next/image";
-import styled from "styled-components";
+import { Hero, HeroInfo } from "../styles/HeroStyles";
+import Product from "../components/Product";
+import { Gallery } from "../styles/Gallery";
 
-export default function Home() {
+export default function Home({ data }) {
+  // Filter data
+  const { jordans, nike, adidas, puma } = data;
   return (
     <div>
       <Head>
@@ -26,6 +30,11 @@ export default function Home() {
           </p>
         </HeroInfo>
       </Hero>
+      <Gallery>
+        {jordans.map((product) => (
+          <Product key={jordans.product_slug} product={product} />
+        ))}
+      </Gallery>
       <Hero>
         <HeroInfo>
           <h1>NIKEY SHOES</h1>
@@ -42,6 +51,11 @@ export default function Home() {
           <img src="/images/jordan 1 retro.png" alt="Jordans" />
         </div>
       </Hero>
+      <Gallery>
+        {nike.map((product) => (
+          <Product key={nike.product_slug} product={product} />
+        ))}
+      </Gallery>
       <Hero>
         <div>
           <img src="/images/adidas boots.webp" alt="Adidas" />
@@ -58,9 +72,14 @@ export default function Home() {
           </p>
         </HeroInfo>
       </Hero>
+      <Gallery>
+        {adidas.map((product) => (
+          <Product key={adidas.product_slug} product={product} />
+        ))}
+      </Gallery>
       <Hero>
         <HeroInfo>
-        <h1>SO YOU WANNA GO TO THE MOON?</h1>
+          <h1>SO YOU WANNA GO TO THE MOON?</h1>
           <p>
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Ducimus
             consectetur explicabo repellendus neque vel consequatur fugiat.
@@ -71,30 +90,22 @@ export default function Home() {
           </p>
         </HeroInfo>
         <div>
-        <img src="/images/yeezy-knit-runner.jpg" alt="yeezy knit runner" />
+          <img src="/images/yeezy-knit-runner.jpg" alt="yeezy knit runner" />
         </div>
       </Hero>
+      <Gallery>
+        {puma.map((product) => (
+          <Product key={puma.product_slug} product={product} />
+        ))}
+      </Gallery>
     </div>
   );
 }
 
-const Hero = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 3rem;
-  div {
-    img {
-      max-width: 100%;
-    }
-  }
-`;
-
-const HeroInfo = styled.div`
-  h1,
-  p {
-    font-size: 1.5rem;
-  }
-`;
+export async function getServerSideProps() {
+  const res = await fetch("http://localhost:3000/api/products");
+  const data = await res.json();
+  return {
+    props: { data },
+  };
+}
