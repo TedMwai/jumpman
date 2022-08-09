@@ -1,6 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Header, Logos, Links, NavBar, Icons, Count } from "../styles/NavStyles";
+import {
+  Header,
+  Logos,
+  Links,
+  NavBar,
+  Icons,
+  Count,
+} from "../styles/NavStyles";
 
 const Nav = () => {
   return (

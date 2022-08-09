@@ -67,7 +67,7 @@ model products {
   category_id   Int
   name          String          @db.VarChar(100)
   description   String          @db.VarChar(1000)
-  product_slug  String          @db.VarChar(100)
+  product_slug  String          @unique(map: "product_slug") @db.VarChar(100)
   price         Int
   photo         String          @db.VarChar(100)
   created_at    DateTime?       @db.Date

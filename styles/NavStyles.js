@@ -37,6 +37,11 @@ export const NavBar = styled.div`
     a {
       margin: 0rem 0.8rem;
       font-size: 1rem;
+      &:hover {
+        border-bottom: 0.12rem solid black;
+        padding-bottom: 0.1rem;
+        transition: all 0.2s ease;
+      }
     }
   }
 `;

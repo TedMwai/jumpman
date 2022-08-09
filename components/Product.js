@@ -5,12 +5,14 @@ const Product = ({ product }) => {
   const { product_slug, price, photo, name } = product;
   return (
     <ProductStyles>
-      <Link href={`/product/${product_slug}`}>
+      <Link href={`/products/${product_slug}`}>
         <div>
           <img src={`/images/${photo}`} alt={name} />
         </div>
       </Link>
-      <h4>{name}</h4>
+      <h4>
+        <Link href={`/products/${product_slug}`}>{name}</Link>
+      </h4>
       <p>${price}</p>
     </ProductStyles>
   );
