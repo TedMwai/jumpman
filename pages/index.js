@@ -32,7 +32,7 @@ export default function Home({ data }) {
       </Hero>
       <Gallery>
         {jordans.map((product) => (
-          <Product key={jordans.product_slug} product={product} />
+          <Product key={product.product_slug} product={product} />
         ))}
       </Gallery>
       <Hero>
@@ -53,7 +53,7 @@ export default function Home({ data }) {
       </Hero>
       <Gallery>
         {nike.map((product) => (
-          <Product key={nike.product_slug} product={product} />
+          <Product key={product.product_slug} product={product} />
         ))}
       </Gallery>
       <Hero>
@@ -74,7 +74,7 @@ export default function Home({ data }) {
       </Hero>
       <Gallery>
         {adidas.map((product) => (
-          <Product key={adidas.product_slug} product={product} />
+          <Product key={product.product_slug} product={product} />
         ))}
       </Gallery>
       <Hero>
@@ -95,7 +95,7 @@ export default function Home({ data }) {
       </Hero>
       <Gallery>
         {puma.map((product) => (
-          <Product key={puma.product_slug} product={product} />
+          <Product key={product.product_slug} product={product} />
         ))}
       </Gallery>
     </div>

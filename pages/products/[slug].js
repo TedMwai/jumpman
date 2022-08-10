@@ -11,11 +11,42 @@ import {
   SimilarContainer,
   SimilarCard,
 } from "../../styles/ProductDetails";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
 
 const Product = ({ data }) => {
   const { image, product, similarProducts } = data;
+
   const ten = Array.from({ length: 10 }, (_, i) => i + 1);
   const sizes = Array.from({ length: 9 }, (_, i) => i + 37);
+
+  const [size, setSize] = useState();
+  const [quantity, setQuantity] = useState(1);
+
+  const handleClick = (event) => {
+    const parent = event.target.parentElement.children;
+    for (const item of parent) {
+      if (item.style.background !== "") {
+        item.style.background = null;
+        item.style.color = null;
+      }
+    }
+    event.currentTarget.style.background = "#585858";
+    event.currentTarget.style.color = "white";
+    setSize(event.target.innerHTML);
+  };
+
+  const notify = () => {
+    if (size === undefined) {
+      toast.error("Please select a size", {
+        duration: 1500,
+      });
+    } else {
+      toast.success(`${product.name} added to cart`, {
+        duration: 1500,
+      });
+    }
+  };
   return (
     <>
       <DetailsStyle>
@@ -39,13 +70,19 @@ const Product = ({ data }) => {
           </div>
           <h2>Select Size</h2>
           <ProductSizes>
-            {sizes.map((size) => (
-              <button key={size}>{size}</button>
+            {sizes.map((size, index) => (
+              <button key={size} onClick={(e) => handleClick(e)}>
+                {size}
+              </button>
             ))}
           </ProductSizes>
           <div>
             <label>Quantity </label>
-            <select name="quantity" id="quantity">
+            <select
+              name="quantity"
+              id="quantity"
+              onChange={(e) => setQuantity(e.target.value)}
+            >
               {ten.map((item) => (
                 <option key={item} value={item}>
                   {item}
@@ -54,7 +91,8 @@ const Product = ({ data }) => {
             </select>
           </div>
           <Buttons>
-            <BagBtn>Add to Bag</BagBtn>
+            <BagBtn onClick={notify}>Add to Bag</BagBtn>
+            <Toaster />
             <FavouriteButton>Favourite🖤</FavouriteButton>
           </Buttons>
           <p>{product.description}</p>
