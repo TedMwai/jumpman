@@ -8,8 +8,10 @@ import {
   Icons,
   Count,
 } from "../styles/NavStyles";
+import { useSelector } from "react-redux";
 
 const Nav = () => {
+  const count = useSelector((state) => state.cart.quantity);
   return (
     <div>
       <Header>
@@ -78,7 +80,7 @@ const Nav = () => {
             </div>
             <div>
               <Image src="/images/bag.svg" alt="bag" height={50} width={50} />
-              <Count>0</Count>
+              <Count>{count}</Count>
             </div>
           </div>
         </Icons>

@@ -13,6 +13,8 @@ import {
 } from "../../styles/ProductDetails";
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { addProduct } from "../../redux/cartSlice";
 
 const Product = ({ data }) => {
   const { image, product, similarProducts } = data;
@@ -20,8 +22,14 @@ const Product = ({ data }) => {
   const ten = Array.from({ length: 10 }, (_, i) => i + 1);
   const sizes = Array.from({ length: 9 }, (_, i) => i + 37);
 
+  const [shoe, setShoe] = useState({});
   const [size, setSize] = useState();
   const [quantity, setQuantity] = useState(1);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setShoe(product);
+  }, [product]);
 
   const handleClick = (event) => {
     const parent = event.target.parentElement.children;
@@ -33,7 +41,13 @@ const Product = ({ data }) => {
     }
     event.currentTarget.style.background = "#585858";
     event.currentTarget.style.color = "white";
-    setSize(event.target.innerHTML);
+    setSize(parseInt(event.target.innerHTML));
+  };
+
+  const handleSubmit = () => {
+    if (size !== undefined) {
+      dispatch(addProduct({ ...shoe, quantity, size }));
+    }
   };
 
   const notify = () => {
@@ -47,6 +61,7 @@ const Product = ({ data }) => {
       });
     }
   };
+
   return (
     <>
       <DetailsStyle>
@@ -70,7 +85,7 @@ const Product = ({ data }) => {
           </div>
           <h2>Select Size</h2>
           <ProductSizes>
-            {sizes.map((size, index) => (
+            {sizes.map((size) => (
               <button key={size} onClick={(e) => handleClick(e)}>
                 {size}
               </button>
@@ -81,7 +96,7 @@ const Product = ({ data }) => {
             <select
               name="quantity"
               id="quantity"
-              onChange={(e) => setQuantity(e.target.value)}
+              onChange={(e) => setQuantity(parseInt(e.target.value))}
             >
               {ten.map((item) => (
                 <option key={item} value={item}>
@@ -91,7 +106,14 @@ const Product = ({ data }) => {
             </select>
           </div>
           <Buttons>
-            <BagBtn onClick={notify}>Add to Bag</BagBtn>
+            <BagBtn
+              onClick={() => {
+                handleSubmit();
+                notify();
+              }}
+            >
+              Add to Bag
+            </BagBtn>
             <Toaster />
             <FavouriteButton>Favourite🖤</FavouriteButton>
           </Buttons>
