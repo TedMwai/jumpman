@@ -7,11 +7,31 @@ import {
   NavBar,
   Icons,
   Count,
+  Profile,
 } from "../styles/NavStyles";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { useUser } from "@auth0/nextjs-auth0";
 
 const Nav = () => {
+  const { user } = useUser();
+
+  const sendUser = async () => {
+    try {
+      await fetch(`/api/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (user) {
+    sendUser();
+  }
+
   const count = useSelector((state) => state.cart.quantity);
   const router = useRouter();
   return (
@@ -34,10 +54,24 @@ const Nav = () => {
         <div>
           <h1>MR. CARTER</h1>
         </div>
-        <Links>
-          <Link href="/">Join Us</Link>
-          <Link href="/">Sign In</Link>
-        </Links>
+        {user ? (
+          <Profile>
+            <p>Hi, {user.given_name}</p>
+            <Image
+              src={"/images/user_icon.svg"}
+              alt={"profile"}
+              width={30}
+              height={30}
+              onClick={() => router.push(`/profile`)}
+            />
+            |<Link href="/api/auth/logout">Logout</Link>
+          </Profile>
+        ) : (
+          <Links>
+            <Link href="/api/auth/login">Join Us</Link>
+            <Link href="/api/auth/login">Sign In</Link>
+          </Links>
+        )}
       </Header>
       <NavBar>
         <Image

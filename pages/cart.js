@@ -3,7 +3,9 @@ import Image from "next/dist/client/image";
 import styled from "styled-components";
 
 const cart = () => {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const cartItems = useSelector((state) => state.cart.products);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
   const total = useSelector((state) => state.cart.total);
   console.log(cartItems);
   return (

@@ -82,11 +82,9 @@ model products {
 
 model user {
   user_id      Int            @id @default(autoincrement())
-  email        String         @db.VarChar(45)
-  password     String         @db.VarChar(200)
+  email        String         @unique(map: "email") @db.VarChar(45)
   first_name   String         @db.VarChar(45)
   last_name    String         @db.VarChar(45)
-  telephone    String         @db.VarChar(45)
   created_at   DateTime       @db.DateTime(0)
   cart         cart[]
   user_address user_address[]
