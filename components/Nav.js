@@ -9,9 +9,11 @@ import {
   Count,
 } from "../styles/NavStyles";
 import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 const Nav = () => {
   const count = useSelector((state) => state.cart.quantity);
+  const router = useRouter();
   return (
     <div>
       <Header>
@@ -79,7 +81,13 @@ const Nav = () => {
               />
             </div>
             <div>
-              <Image src="/images/bag.svg" alt="bag" height={50} width={50} />
+              <Image
+                src="/images/bag.svg"
+                alt="bag"
+                height={50}
+                width={50}
+                onClick={() => router.push(`/cart`)}
+              />
               <Count>{count}</Count>
             </div>
           </div>
