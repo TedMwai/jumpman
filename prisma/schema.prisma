@@ -10,7 +10,7 @@ datasource db {
 model cart {
   cart_id    Int      @id @default(autoincrement())
   user_id    Int
-  product_id Int
+  product_id Int      @unique(map: "product_id")
   size       Int
   quantity   Int
   created_at DateTime @db.DateTime(0)
@@ -63,7 +63,7 @@ model product_image {
 }
 
 model products {
-  products_id   Int             @id @default(autoincrement())
+  products_id   Int             @id @unique(map: "products_id") @default(autoincrement())
   category_id   Int
   name          String          @db.VarChar(100)
   description   String          @db.VarChar(1000)
@@ -72,7 +72,7 @@ model products {
   photo         String          @db.VarChar(100)
   created_at    DateTime?       @db.Date
   category      category        @relation(fields: [category_id], references: [category_id], onDelete: Cascade, map: "category-id")
-  cart          cart[]
+  cart          cart?
   order_details order_details[]
   product_image product_image[]
   wishlist      wishlist[]
@@ -82,11 +82,9 @@ model products {
 
 model user {
   user_id      Int            @id @default(autoincrement())
-  email        String         @db.VarChar(45)
-  password     String         @db.VarChar(200)
+  email        String         @unique(map: "email") @db.VarChar(45)
   first_name   String         @db.VarChar(45)
   last_name    String         @db.VarChar(45)
-  telephone    String         @db.VarChar(45)
   created_at   DateTime       @db.DateTime(0)
   cart         cart[]
   user_address user_address[]

@@ -3,8 +3,27 @@ import Image from "next/image";
 import { Hero, HeroInfo } from "../styles/HeroStyles";
 import Product from "../components/Product";
 import { Gallery } from "../styles/Gallery";
+import { useUser } from "@auth0/nextjs-auth0";
+import { useEffect } from "react";
 
 export default function Home({ data }) {
+  const { user } = useUser();
+  const sendUser = async () => {
+    try {
+      await fetch(`/api/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  useEffect(() => {
+    if (user) {
+      sendUser();
+    }
+  }, []);
   // Filter data
   const { jordans, nike, adidas, puma } = data;
   return (

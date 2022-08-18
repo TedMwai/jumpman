@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -15,8 +16,10 @@ import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../../redux/cartSlice";
+import { useUser } from "@auth0/nextjs-auth0";
 
 const Product = ({ data }) => {
+  const { user } = useUser();
   const { image, product, similarProducts } = data;
 
   const ten = Array.from({ length: 10 }, (_, i) => i + 1);
@@ -59,6 +62,19 @@ const Product = ({ data }) => {
       toast.success(`${product.name} added to cart`, {
         duration: 1500,
       });
+    }
+  };
+
+  const sendCart = async () => {
+    const cartItems = { product, email: user.email, quantity, size };
+    try {
+      await fetch(`/api/cart`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cartItems),
+      });
+    } catch (error) {
+      console.error(error);
     }
   };
 
@@ -108,7 +124,7 @@ const Product = ({ data }) => {
           <Buttons>
             <BagBtn
               onClick={() => {
-                handleSubmit();
+                user ? sendCart() : handleSubmit();
                 notify();
               }}
             >

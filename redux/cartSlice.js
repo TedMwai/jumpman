@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
+import { UserProfile } from "@auth0/nextjs-auth0/dist/frontend";
 
 const initialState = {
   products: [],
@@ -17,7 +17,6 @@ export const cartSlice = createSlice({
           item.products_id === action.payload.products_id &&
           item.size === action.payload.size
       );
-      console.log(exist);
       if (exist) {
         state.products = [...state.products];
         state.quantity += action.payload.quantity;

@@ -89,3 +89,22 @@ export const Count = styled.span`
   top: 10px;
   right: 20px;
 `;
+
+export const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  img {
+    cursor: pointer;
+  }
+  p,
+  a {
+    font-size: 1.2rem;
+    margin: 0rem 0.5rem;
+  }
+  a {
+    &:hover {
+      border-bottom: 1px solid black;
+      transition: 0.3s ease;
+    }
+  }
+`;

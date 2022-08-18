@@ -2,7 +2,7 @@ import prisma from "../../../lib/prisma";
 
 export default async function getProduct(req, res) {
   const { slug } = req.query;
-  const product = await prisma.products.findFirst({
+  const product = await prisma.products.findUnique({
     where: {
       product_slug: slug,
     },

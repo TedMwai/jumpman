@@ -1,55 +1,116 @@
 import { useSelector } from "react-redux";
 import Image from "next/dist/client/image";
 import styled from "styled-components";
+import { useState, useEffect } from "react";
+import { useUser } from "@auth0/nextjs-auth0";
 
-const cart = () => {
+const Cart = () => {
+  const [cartProducts, setCartProducts] = useState();
+  const [serverCart, setServerCart] = useState(false);
+  const { user } = useUser();
+
+  const getCart = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/cart/?email=${user.email}`
+      );
+      const data = await response.json();
+      setCartProducts(data);
+      setServerCart(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (user) {
+      getCart();
+    }
+  }, [user]);
+
   const cartItems = useSelector((state) => state.cart.products);
   const total = useSelector((state) => state.cart.total);
-  console.log(cartItems);
+
+  console.log(cartProducts);
+
   return (
     <div>
       <Container>
         <CartCard>
           <h1>Bag</h1>
-          {cartItems.map((product) => (
-            <>
-              <Card key={product.products_id}>
-                <Image
-                  src={`/images/${product.photo}`}
-                  alt={product.name}
-                  width={160}
-                  height={160}
-                  objectFit={"cover"}
-                />
-                <div>
-                  <h3>{product.name}</h3>
-                  <p>Size : {product.size}</p>
-                  <p>Quantity : {product.quantity}</p>
-                  <Image
-                    src={`/images/favourite.svg`}
-                    alt={"favourite"}
-                    width={25}
-                    height={25}
-                  />
-                  <Image
-                    src={`/images/delete.svg`}
-                    alt={"favourite"}
-                    width={25}
-                    height={25}
-                  />
+          {serverCart
+            ? cartProducts.map((product) => (
+                <div key={product.products.products_id}>
+                  <Card key={product.products.products_id}>
+                    <Image
+                      src={`/images/${product.products.photo}`}
+                      alt={product.name}
+                      width={160}
+                      height={160}
+                      objectFit={"cover"}
+                    />
+                    <div>
+                      <h3>{product.products.name}</h3>
+                      <p>Size : {product.size}</p>
+                      <p>Quantity : {product.quantity}</p>
+                      <Image
+                        src={`/images/favourite.svg`}
+                        alt={"favourite"}
+                        width={25}
+                        height={25}
+                      />
+                      <Image
+                        src={`/images/delete.svg`}
+                        alt={"favourite"}
+                        width={25}
+                        height={25}
+                      />
+                    </div>
+                    <p>${product.products.price}</p>
+                    <Divider />
+                  </Card>
+                  <Divider />
                 </div>
-                <p>${product.price}</p>
-                <Divider />
-              </Card>
-              <Divider />
-            </>
-          ))}
+              ))
+            : cartItems.map((product) => (
+                <>
+                  <Card key={product.products_id}>
+                    <Image
+                      src={`/images/${product.photo}`}
+                      alt={product.name}
+                      width={160}
+                      height={160}
+                      objectFit={"cover"}
+                    />
+                    <div>
+                      <h3>{product.name}</h3>
+                      <p>Size : {product.size}</p>
+                      <p>Quantity : {product.quantity}</p>
+                      <Image
+                        src={`/images/favourite.svg`}
+                        alt={"favourite"}
+                        width={25}
+                        height={25}
+                      />
+                      <Image
+                        src={`/images/delete.svg`}
+                        alt={"favourite"}
+                        width={25}
+                        height={25}
+                      />
+                    </div>
+                    <p>${product.price}</p>
+                    <Divider />
+                  </Card>
+                  <Divider />
+                </>
+              ))}
         </CartCard>
         <Summary>
           <h2>Order Summary</h2>
           <div>
             <p>Subtotal</p>
-            <p>{total}$</p>
+            <p>0$</p>
           </div>
           <CheckoutButton>Checkout</CheckoutButton>
         </Summary>
@@ -58,7 +119,7 @@ const cart = () => {
   );
 };
 
-export default cart;
+export default Cart;
 
 const Container = styled.div`
   display: flex;
