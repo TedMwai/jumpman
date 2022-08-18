@@ -15,6 +15,23 @@ import { useUser } from "@auth0/nextjs-auth0";
 
 const Nav = () => {
   const { user } = useUser();
+
+  const sendUser = async () => {
+    try {
+      await fetch(`/api/user`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(user),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  if (user) {
+    sendUser();
+  }
+
   const count = useSelector((state) => state.cart.quantity);
   const router = useRouter();
   return (

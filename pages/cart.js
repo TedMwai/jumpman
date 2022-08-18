@@ -27,96 +27,99 @@ const Cart = () => {
       getCart();
     }
   }, [user]);
+  const cart = () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const cartItems = useSelector((state) => state.cart.products);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const total = useSelector((state) => state.cart.total);
 
-  const cartItems = useSelector((state) => state.cart.products);
-  const total = useSelector((state) => state.cart.total);
+    console.log(cartProducts);
 
-  console.log(cartProducts);
-
-  return (
-    <div>
-      <Container>
-        <CartCard>
-          <h1>Bag</h1>
-          {serverCart
-            ? cartProducts.map((product) => (
-                <div key={product.products.products_id}>
-                  <Card key={product.products.products_id}>
-                    <Image
-                      src={`/images/${product.products.photo}`}
-                      alt={product.name}
-                      width={160}
-                      height={160}
-                      objectFit={"cover"}
-                    />
-                    <div>
-                      <h3>{product.products.name}</h3>
-                      <p>Size : {product.size}</p>
-                      <p>Quantity : {product.quantity}</p>
+    return (
+      <div>
+        <Container>
+          <CartCard>
+            <h1>Bag</h1>
+            {serverCart
+              ? cartProducts.map((product) => (
+                  <div key={product.products.products_id}>
+                    <Card key={product.products.products_id}>
                       <Image
-                        src={`/images/favourite.svg`}
-                        alt={"favourite"}
-                        width={25}
-                        height={25}
+                        src={`/images/${product.products.photo}`}
+                        alt={product.name}
+                        width={160}
+                        height={160}
+                        objectFit={"cover"}
                       />
-                      <Image
-                        src={`/images/delete.svg`}
-                        alt={"favourite"}
-                        width={25}
-                        height={25}
-                      />
-                    </div>
-                    <p>${product.products.price}</p>
+                      <div>
+                        <h3>{product.products.name}</h3>
+                        <p>Size : {product.size}</p>
+                        <p>Quantity : {product.quantity}</p>
+                        <Image
+                          src={`/images/favourite.svg`}
+                          alt={"favourite"}
+                          width={25}
+                          height={25}
+                        />
+                        <Image
+                          src={`/images/delete.svg`}
+                          alt={"favourite"}
+                          width={25}
+                          height={25}
+                        />
+                      </div>
+                      <p>${product.products.price}</p>
+                      <Divider />
+                    </Card>
                     <Divider />
-                  </Card>
-                  <Divider />
-                </div>
-              ))
-            : cartItems.map((product) => (
-                <>
-                  <Card key={product.products_id}>
-                    <Image
-                      src={`/images/${product.photo}`}
-                      alt={product.name}
-                      width={160}
-                      height={160}
-                      objectFit={"cover"}
-                    />
-                    <div>
-                      <h3>{product.name}</h3>
-                      <p>Size : {product.size}</p>
-                      <p>Quantity : {product.quantity}</p>
+                  </div>
+                ))
+              : cartItems.map((product) => (
+                  <>
+                    <Card key={product.products_id}>
                       <Image
-                        src={`/images/favourite.svg`}
-                        alt={"favourite"}
-                        width={25}
-                        height={25}
+                        src={`/images/${product.photo}`}
+                        alt={product.name}
+                        width={160}
+                        height={160}
+                        objectFit={"cover"}
                       />
-                      <Image
-                        src={`/images/delete.svg`}
-                        alt={"favourite"}
-                        width={25}
-                        height={25}
-                      />
-                    </div>
-                    <p>${product.price}</p>
+                      <div>
+                        <h3>{product.name}</h3>
+                        <p>Size : {product.size}</p>
+                        <p>Quantity : {product.quantity}</p>
+                        <Image
+                          src={`/images/favourite.svg`}
+                          alt={"favourite"}
+                          width={25}
+                          height={25}
+                        />
+                        <Image
+                          src={`/images/delete.svg`}
+                          alt={"favourite"}
+                          width={25}
+                          height={25}
+                        />
+                      </div>
+                      <p>${product.price}</p>
+                      <Divider />
+                    </Card>
                     <Divider />
-                  </Card>
-                  <Divider />
-                </>
-              ))}
-        </CartCard>
-        <Summary>
-          <h2>Order Summary</h2>
-          <div>
-            <p>Subtotal</p>
-            <p>0$</p>
-          </div>
-          <CheckoutButton>Checkout</CheckoutButton>
-        </Summary>
-      </Container>
-    </div>
-  );
+                  </>
+                ))}
+          </CartCard>
+          <Summary>
+            <h2>Order Summary</h2>
+            <div>
+              <p>Subtotal</p>
+              <p>0$</p>
+            </div>
+            <CheckoutButton>Checkout</CheckoutButton>
+          </Summary>
+        </Container>
+      </div>
+    );
+  };
 };
 
 export default Cart;
