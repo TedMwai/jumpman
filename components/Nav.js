@@ -7,10 +7,13 @@ import {
   NavBar,
   Icons,
   Count,
+  Profile,
 } from "../styles/NavStyles";
 import { useSelector } from "react-redux";
+import { useSession, signIn, signOut } from "next-auth/react";
 
 const Nav = () => {
+  const { data: session } = useSession();
   const count = useSelector((state) => state.cart.quantity);
   return (
     <div>
@@ -32,10 +35,24 @@ const Nav = () => {
         <div>
           <h1>MR. CARTER</h1>
         </div>
-        <Links>
-          <Link href="/">Join Us</Link>
-          <Link href="/">Sign In</Link>
-        </Links>
+        {session ? (
+          <Profile>
+            <p>Hi, {session.user.name}</p>
+            <Image
+              src={"/images/user_icon.svg"}
+              alt={"profile"}
+              width={30}
+              height={30}
+              onClick={() => router.push(`/profile`)}
+            />
+            |<button onClick={() => signOut()}>Sign in</button>
+          </Profile>
+        ) : (
+          <Links>
+            <button onClick={() => signIn("google")}>Join Us</button>
+            <button onClick={() => signIn("google")}>Sign in</button>
+          </Links>
+        )}
       </Header>
       <NavBar>
         <Image

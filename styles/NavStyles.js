@@ -24,8 +24,12 @@ export const Links = styled.div`
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  a {
-    font-size: 1.1rem;
+  button {
+    outline: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 1.2rem;
   }
 `;
 export const NavBar = styled.div`
@@ -88,4 +92,28 @@ export const Count = styled.span`
   position: relative;
   top: 10px;
   right: 20px;
+`;
+
+export const Profile = styled.div`
+  display: flex;
+  align-items: center;
+  img {
+    cursor: pointer;
+  }
+  p {
+    font-size: 1.2rem;
+    margin: 0rem 0.5rem;
+  }
+  button {
+    border: none;
+    background: none;
+    outline: none;
+    font-size: 1.2rem;
+    margin: 0rem 0.5rem;
+    cursor: pointer;
+    &:hover {
+      border-bottom: 1px solid black;
+      transition: 0.3s ease;
+    }
+  }
 `;

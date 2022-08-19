@@ -7,14 +7,14 @@ export default async function getProduct(req, res) {
       product_slug: slug,
     },
   });
-  const pics = await prisma.product_image.findMany({
+  const pics = await prisma.Productimage.findMany({
     where: {
       product_slug: slug,
     },
   });
   // console.log(product.category_id);
   const similarProducts =
-    await prisma.$queryRaw`SELECT * FROM jumpman.products WHERE category_id <> ${product.category_id} ORDER BY RAND() LIMIT 6`;
+    await prisma.$queryRaw`SELECT * FROM products WHERE categoryId <> ${product.categoryId} ORDER BY RAND() LIMIT 6`;
   const image = pics.map((image) => image.image);
   const data = { product, image, similarProducts };
   res.json(data);

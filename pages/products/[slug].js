@@ -18,7 +18,7 @@ import { addProduct } from "../../redux/cartSlice";
 
 const Product = ({ data }) => {
   const { image, product, similarProducts } = data;
-
+  
   const ten = Array.from({ length: 10 }, (_, i) => i + 1);
   const sizes = Array.from({ length: 9 }, (_, i) => i + 37);
 
@@ -125,7 +125,7 @@ const Product = ({ data }) => {
       </h3>
       <SimilarContainer>
         {similarProducts.map((product) => (
-          <SimilarCard key={product.products_id}>
+          <SimilarCard key={product.id}>
             <Link href={`/products/${product.product_slug}`}>
               <div>
                 <img src={`/images/${product.photo}`} alt={product.name} />
