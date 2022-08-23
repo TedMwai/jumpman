@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useSelector } from "react-redux";
 
 const initialState = {
   products: [],
@@ -14,8 +13,7 @@ export const cartSlice = createSlice({
     addProduct: (state, action) => {
       const exist = !!state.products.find(
         (item) =>
-          item.products_id === action.payload.products_id &&
-          item.size === action.payload.size
+          item.id === action.payload.id && item.size === action.payload.size
       );
       console.log(exist);
       if (exist) {
@@ -28,8 +26,13 @@ export const cartSlice = createSlice({
         state.total += action.payload.price * action.payload.quantity;
       }
     },
+    dbProducts: (state, action) => {
+      state.products = action.payload.resdbCart.cartItems;
+      state.quantity = action.payload.resdbCart.quantity[0].quantity;
+      state.total = action.payload.resdbCart.price[0].TOTAL;
+    },
   },
 });
 
-export const { addProduct } = cartSlice.actions;
+export const { addProduct, dbProducts } = cartSlice.actions;
 export default cartSlice.reducer;

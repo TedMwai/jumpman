@@ -9,12 +9,28 @@ import {
   Count,
   Profile,
 } from "../styles/NavStyles";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { dbProducts } from "../redux/cartSlice";
 
 const Nav = () => {
   const { data: session } = useSession();
+
+  const dispatch = useDispatch();
+  const dbItems = async () => {
+    const dbCart = await fetch("http://localhost:3000/api/cart");
+    const resdbCart = await dbCart.json();
+    dispatch(dbProducts({ resdbCart }));
+  };
+
+  useEffect(() => {
+    dbItems();
+  }, []);
+
   const count = useSelector((state) => state.cart.quantity);
+  const router = useRouter();
   return (
     <div>
       <Header>
@@ -45,7 +61,7 @@ const Nav = () => {
               height={30}
               onClick={() => router.push(`/profile`)}
             />
-            |<button onClick={() => signOut()}>Sign in</button>
+            |<button onClick={() => signOut()}>Logout</button>
           </Profile>
         ) : (
           <Links>
@@ -96,7 +112,13 @@ const Nav = () => {
               />
             </div>
             <div>
-              <Image src="/images/bag.svg" alt="bag" height={50} width={50} />
+              <Image
+                src="/images/bag.svg"
+                alt="bag"
+                height={50}
+                width={50}
+                onClick={() => router.push(`/cart`)}
+              />
               <Count>{count}</Count>
             </div>
           </div>

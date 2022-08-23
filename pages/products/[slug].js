@@ -14,11 +14,13 @@ import {
 import { useEffect, useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import { addProduct } from "../../redux/cartSlice";
+import { addProduct, dbProducts } from "../../redux/cartSlice";
+import { useSession } from "next-auth/react";
 
 const Product = ({ data }) => {
+  const { data: session } = useSession();
   const { image, product, similarProducts } = data;
-  
+
   const ten = Array.from({ length: 10 }, (_, i) => i + 1);
   const sizes = Array.from({ length: 9 }, (_, i) => i + 37);
 
@@ -60,6 +62,22 @@ const Product = ({ data }) => {
         duration: 1500,
       });
     }
+  };
+
+  const sendCart = async () => {
+    const cartItems = { product, quantity, size };
+    try {
+      await fetch(`/api/cart`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(cartItems),
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    const dbCart = await fetch("http://localhost:3000/api/cart");
+    const resdbCart = await dbCart.json();
+    dispatch(dbProducts({ resdbCart }));
   };
 
   return (
@@ -108,7 +126,7 @@ const Product = ({ data }) => {
           <Buttons>
             <BagBtn
               onClick={() => {
-                handleSubmit();
+                session ? sendCart() : handleSubmit();
                 notify();
               }}
             >
