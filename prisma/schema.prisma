@@ -10,7 +10,7 @@ datasource db {
 model Cart {
   id         Int      @id @default(autoincrement())
   userId     String
-  productId  Int
+  productId  Int      @unique
   size       Int
   quantity   Int
   created_at DateTime @db.DateTime(0)
@@ -117,8 +117,7 @@ model Account {
   session_state      String?
   oauth_token_secret String?
   oauth_token        String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user               User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId], name: "provider_providerAccountId")
 }
